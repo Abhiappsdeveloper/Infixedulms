@@ -59,9 +59,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://infixedulms.madhutechnoworld.in/'),
 
-    'short_url' => preg_replace('#^https?://#', '', rtrim(env('APP_URL', 'http://localhost'),'/')),
+    'short_url' => preg_replace('#^https?://#', '', rtrim(env('APP_URL', 'https://infixedulms.madhutechnoworld.in/'),'/')),
 
     /*
     |--------------------------------------------------------------------------
