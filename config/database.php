@@ -41,11 +41,12 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
+            'url' => env('https://auth-db1149.hstgr.io/'),
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'u709483251_infixedulms'),
+            'username' => env('DB_USERNAME', 'u709483251_infixedulms'),
+            'password' => env('DB_PASSWORD', 'Madhu@6291144591'),
             // 'unix_socket' => env('DB_SOCKET', '/Applications/MAMP/tmp/mysql/mysql.sock'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
