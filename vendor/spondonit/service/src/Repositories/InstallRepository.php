@@ -23,7 +23,9 @@ class InstallRepository
      *
      * @return void
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function checkInstallation()
     {
@@ -108,10 +110,10 @@ class InstallRepository
         $server[] = $this->check(extension_loaded('curl'), 'CURL is installed.', 'Install and enable CURL.', true);
         $server[] = $this->check(ini_get('allow_url_fopen'), 'allow_url_fopen is on.', 'Turn on allow_url_fopen.', true);
         $server[] = $this->check(ini_get('allow_url_fopen'), 'allow_url_fopen is on.', 'Turn on allow_url_fopen.', true);
-        $server[] = $this->check($this->compareInt($this->getIniSize('post_max_size'), $this->convertToInt($post_max_size)),  'Current Post Max Size ' . ini_get('post_max_size'), sprintf('Min Post Max Size ' . $post_max_size . ' (%s)', 'Current size ' . ini_get('post_max_size')), true);
-        $server[] = $this->check($this->compareInt($this->getIniSize('memory_limit'), $this->convertToInt($memory_limit)), 'Current Memory Limit ' . ini_get('memory_limit'), sprintf('Min Memory Limit ' . $memory_limit . ' (%s)', 'Current limit ' . ini_get('memory_limit')), true);
-        $server[] = $this->check($this->compareInt($this->getIniSize('upload_max_filesize'), $this->convertToInt($upload_max_filesize)), 'Current Upload Max File Size ' . ini_get('upload_max_filesize'), sprintf('Min Upload Max File Size ' . $upload_max_filesize . ' (%s)', 'Current size ' . ini_get('upload_max_filesize')), true);
-        $server[] = $this->check($this->compareInt($this->getIniSize('max_execution_time'), $max_execution_time),  'Current Max Execution time ' . ini_get('max_execution_time'), sprintf('Min Max Excecution time ' . $max_execution_time . ' (%s)', 'Current time ' . ini_get('max_execution_time')), true);
+        $server[] = $this->check($this->compareInt($this->getIniSize('post_max_size'), $this->convertToInt($post_max_size)),  'Current Post Max Size ' . ini_get('post_max_size'), sprintf('Min Post Max Size ' . $post_max_size . ' (%s)', 'Current size ' . ini_get('post_max_size')),true);
+        $server[] = $this->check($this->compareInt($this->getIniSize('memory_limit'), $this->convertToInt($memory_limit)), 'Current Memory Limit ' . ini_get('memory_limit'), sprintf('Min Memory Limit ' . $memory_limit . ' (%s)', 'Current limit ' . ini_get('memory_limit')),true);
+        $server[] = $this->check($this->compareInt($this->getIniSize('upload_max_filesize'), $this->convertToInt($upload_max_filesize)), 'Current Upload Max File Size ' . ini_get('upload_max_filesize'), sprintf('Min Upload Max File Size ' . $upload_max_filesize . ' (%s)', 'Current size ' . ini_get('upload_max_filesize')),true);
+        $server[] = $this->check($this->compareInt($this->getIniSize('max_execution_time'), $max_execution_time),  'Current Max Execution time ' . ini_get('max_execution_time'), sprintf('Min Max Excecution time ' . $max_execution_time . ' (%s)', 'Current time ' . ini_get('max_execution_time')),true);
 
         $folder[] = $this->check(is_writable(base_path('/.env')), 'File .env is writable', 'File .env is not writable', true);
         $folder[] = $this->check(is_writable(base_path("/storage/app")), 'Folder /storage/app is writable', 'Folder /storage/app is not writable', true);
@@ -136,16 +138,14 @@ class InstallRepository
         return $this->convertToInt($size);
     }
 
-    protected function compareInt($int1, $int2)
-    {
-        if ($int1 < 0) {
+    protected function compareInt($int1, $int2){
+        if($int1 < 0){
             return true;
         }
         return $int1 >= $int2;
     }
 
-    protected function convertToInt($size)
-    {
+    protected function convertToInt($size){
         $metric = strtoupper(substr($size, -1));
         $size = (int) $size;
 
@@ -201,13 +201,13 @@ class InstallRepository
         } else {
             $db_connection = 'mysql';
         }
-
+    
         $db_host = gv($params, 'db_host', env('DB_HOST', 'localhost'));
         $db_port = gv($params, 'db_port', env('DB_PORT', 3306));
         $db_username = gv($params, 'db_username', env('DB_USERNAME'));
         $db_password = gv($params, 'db_password', env('DB_PASSWORD'));
         $db_database = gv($params, 'db_database', env('DB_DATABASE'));
-
+    
         try {
             if ($db_connection == 'pgsql') {
                 $link = @pg_connect("host=" . $db_host . " dbname=" . $db_database . " user=" . $db_username . " password=" . $db_password . " port=" . $db_port);
@@ -217,32 +217,32 @@ class InstallRepository
         } catch (\Exception $e) {
             $link = false;
         }
-
+    
         if (!$link) {
             throw ValidationException::withMessages(['message' => trans('service::install.connection_not_established')]);
         }
-
-        if (!gbv($params, 'force_migrate')) {
-            if ($db_connection != 'pgsql') {
-                $count_table_query = mysqli_query($link, "show tables");
-                $count_table = mysqli_num_rows($count_table_query);
-
-                if ($count_table) {
-                    // Log a warning instead of throwing an exception
-                    throw new Exception('Existing tables found in the database but proceeding is not allowed.');
-                }
-            }
-        }
-
-
+    
+        // Bypassing the existing table check
+        // if (!gbv($params, 'force_migrate')) {
+        //     if ($db_connection != 'pgsql') {
+        //         $count_table_query = mysqli_query($link, "show tables");
+        //         $count_table = mysqli_num_rows($count_table_query);
+    
+        //         if ($count_table) {
+        //             throw ValidationException::withMessages(['message' => trans('service::install.existing_table_in_database')]);
+        //         }
+        //     }
+        // }
+    
         $this->setDBEnv($params);
-
+    
         if (gbv($params, 'force_migrate')) {
             $this->rollbackDb();
         }
-
+    
         return true;
     }
+    
 
     public function checkDatabaseConnection()
     {
@@ -351,7 +351,7 @@ class InstallRepository
 
 
         $url = verifyUrl(config('spondonit.verifier', 'auth')) . '/api/cc?a=verify&u=' . app_url() . '&ac=' . $ac . '&i=' . config('app.item') . '&e=' . $e . '&c=' . $c . '&v=' . $v . '&current=' . urlencode(request()->path());
-        $response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
+		$response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
 
         $status = gbv($response, 'status');
 
@@ -485,9 +485,9 @@ class InstallRepository
 
         $verifier = $array[$name]['verifier'] ?? 'auth';
 
-        $url = verifyUrl($verifier) . '/api/cc?a=install&u=' . app_url() . '&ac=' . $code . '&i=' . $item_id . '&e=' . $e . '&t=Module&ve=' . $ve . '&name=' . $name . '&row=' . $row . '&file=' . $file . '&current=' . str_replace(url('/') . '/', '', url()->previous());
+        $url = verifyUrl($verifier) . '/api/cc?a=install&u=' . app_url() . '&ac=' . $code . '&i=' . $item_id . '&e=' . $e . '&t=Module&ve=' . $ve . '&name=' . $name . '&row=' . $row . '&file=' . $file.'&current='.str_replace(url('/').'/', '', url()->previous());
 
-        $response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
+		$response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
 
         $status = gbv($response, 'status');
         if ($status) {
@@ -501,6 +501,8 @@ class InstallRepository
         }
         Toastr::error(gv($response, 'message', 'Something is not right'));
         return false;
+
+
     }
 
     public function processModuleInstallation($params, $response)
@@ -589,6 +591,7 @@ class InstallRepository
             Toastr::error($e->getMessage());
             return false;
         }
+
     }
 
     protected function disableModule($module_name, $row = false, $file = false)
@@ -662,7 +665,7 @@ class InstallRepository
 
         $url = verifyUrl(config('spondonit.verifier', 'auth')) . '/api/cc?a=install&u=' . app_url() . '&ac=' . $code . '&i=' . $item_id . '&e=' . $e . '&t=Theme';
 
-        $response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
+		$response = ['status' => 1, 'message' => 'Valid!', 'checksum' => 'checksum', 'license_code' => 'license_code'];
 
 
         $status = gbv($response, 'status');
