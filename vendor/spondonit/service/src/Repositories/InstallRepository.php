@@ -236,9 +236,9 @@ class InstallRepository
     
         // $this->setDBEnv($params);
     
-        if (gbv($params, 'force_migrate')) {
-            $this->rollbackDb();
-        }
+        // if (gbv($params, 'force_migrate')) {
+        //     $this->rollbackDb();
+        // }
     
         return true;
     }
