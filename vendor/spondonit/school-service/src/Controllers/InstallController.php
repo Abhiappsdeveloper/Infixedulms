@@ -30,15 +30,16 @@ class InstallController extends Controller{
     }
 
 
-    public function user(){
-        $ac = Storage::exists('.temp_app_installed') ? Storage::get('.temp_app_installed') : null;
-
-        if(!$this->service_repo->checkDatabaseConnection()){
+    public function user() {
+        $isAppInstalled = Storage::exists('.temp_app_installed');
+    
+        if (!$isAppInstalled) {
             abort(404);
         }
-
-		return view('school::install.user');
+    
+        return view('school::install.user');
     }
+    
 
     public function post_user(UserRequest $request){
       
