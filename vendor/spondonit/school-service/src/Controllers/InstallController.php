@@ -40,11 +40,20 @@ class InstallController extends Controller{
         return view('school::install.user');
     }
     
+    // public function user(){
+    //     $ac = Storage::exists('.temp_app_installed') ? Storage::get('.temp_app_installed') : null;
+
+    //     if(!$this->service_repo->checkDatabaseConnection() || !$ac){
+    //         abort(404);
+    //     }
+
+	// 	return view('school::install.user');
+    // }
 
     public function post_user(UserRequest $request){
       
         $this->service_repo->install($request->all());
-        $this->repo->install($request->all());
+        // $this->repo->install($request->all());
 		return response()->json(['message' => __('school::install.done_msg'), 'goto' => route('service.done')]);
     }
 
