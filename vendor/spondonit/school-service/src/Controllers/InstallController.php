@@ -53,7 +53,7 @@ class InstallController extends Controller{
     public function post_user(UserRequest $request){
       
         $this->service_repo->install($request->all());
-        // $this->repo->install($request->all());
+        $this->repo->install($request->all());
 		return response()->json(['message' => __('school::install.done_msg'), 'goto' => route('service.done')]);
     }
 
