@@ -33,7 +33,7 @@ class InstallController extends Controller{
     public function user(){
         $ac = Storage::exists('.temp_app_installed') ? Storage::get('.temp_app_installed') : null;
 
-        if(!$this->service_repo->checkDatabaseConnection() || !$ac){
+        if(!$this->service_repo->checkDatabaseConnection()){
             abort(404);
         }
 

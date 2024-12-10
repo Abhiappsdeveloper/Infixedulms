@@ -68,20 +68,23 @@
 @stop
 
 @push('js')
-    <script>
-        _formValidation('content_form');
-        @if(config('spondonit.support_multi_connection', false))
-            $('#db_connection').select2();
-            $(document).on('change', '#db_connection', function(){
-                $('#db_port').val($(this).val() === 'pgsql' ? 5432 : 3306)
-            })
-            $('[data-toogle="tooltip"]').tooltip()
-        @endif
-        $(document).ready(function(){
+<script>
+    _formValidation('content_form');
 
-            setTimeout(function(){
-                $('.preloader h2').html('We are validating your database. <br> Please do not refresh or close the browser')
-            }, 2000);
-        })
-    </script>
+    @if(config('spondonit.support_multi_connection', false))
+        $('#db_connection').select2();
+        $(document).on('change', '#db_connection', function () {
+            $('#db_port').val($(this).val() === 'pgsql' ? 5432 : 3306);
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    @endif
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            if ($('.preloader h2').length) {
+                $('.preloader h2').html('We are validating your database. <br> Please do not refresh or close the browser');
+            }
+        }, 2000);
+    });
+</script>
 @endpush

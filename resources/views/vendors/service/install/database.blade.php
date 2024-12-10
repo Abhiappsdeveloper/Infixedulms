@@ -5,7 +5,6 @@
     <div class="card-header">
         <h2 class="text-center text-uppercase color-whitesmoke " >{{ __('service::install.database_title') }}
         </h2>
-
     </div>
 </div>
 
@@ -20,7 +19,7 @@
                 <form method="post" action="{{ route('service.database') }}" id="content_form">
                     @if(config('spondonit.support_multi_connection', false))
                     <div class="form-group">
-                        <label class="required" for="db_connection">{{ __('service::install.db_connection') }} <i class="ti-help" data-toogle="tooltip" title="{{ __('service::install.db_connection_help') }}"></i> </label>
+                        <label class="required" for="db_connection">{{ __('service::install.db_connection') }} <i class="ti-help" data-toggle="tooltip" title="{{ __('service::install.db_connection_help') }}"></i> </label>
                         <select class="form-control select2" name="db_connection" id="db_connection"  required  data-placeholder="{{ __('service::install.db_connection') }}" data-parsley-errors-container="#parsley_db_connection_error">
                             <option value="mysql" {{ env('DB_CONNECTION', 'mysql') == 'mysql' ? 'selected' : '' }}>{{ __('service::install.mysql') }}</option>
                             <option value="pgsql" {{ env('DB_CONNECTION', 'mysql') == 'pgsql' ? 'selected' : '' }}>{{ __('service::install.pgsql') }}</option>
@@ -50,38 +49,36 @@
                         <input type="password" class="form-control" name="db_password" id="db_password" placeholder="{{ __('service::install.db_password') }}" value="{{ env('DB_PASSWORD') }}">
                     </div>
                     <div class="form-group">
-                        <label data-id="bg_option" class="primary_checkbox d-flex mr-12 ">
-                            <input name="force_migrate" type="checkbox">
-                            <span class="checkmark"></span>
-                            <span class="ml-2">Force Delete Previous Table</span>
-                        </label>
+                        <label data-id="bg_option" class="primary_checkbox d-flex mr-12 "><input name="force_migrate" type="checkbox"><span class="checkmark"></span><span class="ml-2">Force Delete Previous Table</span></label>
                     </div>
 
                    <button type="submit" class="offset-3 col-sm-6 primary-btn fix-gr-bg mt-40 submit bc-color" >{{ __('service::install.lets_go_next') }}</button>
                    <button type="button" class="offset-3 col-sm-6 primary-btn fix-gr-bg mt-40 submitting bc-color" disabled style="display:none">{{ __('service::install.submitting') }}</button>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
 @stop
 
 @push('js')
-    <script>
-        _formValidation('content_form');
-        @if(config('spondonit.support_multi_connection', false))
-            $('#db_connection').select2();
-            $(document).on('change', '#db_connection', function(){
-                $('#db_port').val($(this).val() === 'pgsql' ? 5432 : 3306)
-            })
-            $('[data-toogle="tooltip"]').tooltip()
-        @endif
-        $(document).ready(function(){
+<script>
+    _formValidation('content_form');
 
-            setTimeout(function(){
-                $('.preloader h2').html('We are validating your database. <br> Please do not refresh or close the browser')
-            }, 2000);
-        })
-    </script>
+    @if(config('spondonit.support_multi_connection', false))
+    $(document).ready(function () {
+        $('#db_connection').select2();
+        $('#db_connection').on('change', function () {
+            $('#db_port').val($(this).val() === 'pgsql' ? 5432 : 3306);
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    @endif
+
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('.preloader h2').html('We are validating your database. <br> Please do not refresh or close the browser');
+        }, 2000);
+    });
+</script>
 @endpush
