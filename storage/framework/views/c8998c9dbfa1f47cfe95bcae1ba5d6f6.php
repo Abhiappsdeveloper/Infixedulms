@@ -1,0 +1,56 @@
+<div class="modal fade admin-query" id="offline_message_modal">
+    <div class="modal-dialog modal_800px modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <?php echo e(trans('profile.offline_status_message')); ?>
+
+                </h4>
+                <button type="button" class="close " data-bs-dismiss="modal">
+                    <i class="ti-close "></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="<?php echo e(route('users.offline_status.submit')); ?>" method="POST" enctype="multipart/form-data">
+                    <?php echo csrf_field(); ?>
+
+                    <div class="row">
+                        <div class="col text-justify">
+                            When your account is set to offline mode, a notification will appear on your profile to
+                            inform users. Please feel free to leave a personalized message in the input provided.
+                        </div>
+
+
+                        <div class="col-xl-12 mt-1">
+                            <div class="single_input mb_25">
+                                <label class="primary_label2" for=""><?php echo e(__('profile.offline_message')); ?> [note:maximum
+                                    500 characters]</label>
+                                <textarea class="primary_textarea offline_message_input"
+                                          name="offline_message" style="height: 200px"
+                                          rows="3"><?php echo e(@$user->userInfo->offline_message); ?></textarea>
+                            </div>
+                            <small> <span class="offline_message_input_character_count text-danger"></span></small>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 text-center pt_15">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-secondary me-1" data-bs-dismiss="modal">
+                                <?php echo e(trans('common.Close')); ?>
+
+                            </button>
+                            <button class="theme_btn small_btn"
+                                    type="submit">
+                                <?php echo e(trans('common.Save')); ?>
+
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<?php /**PATH /home/u709483251/domains/infixedulms.madhutechnoworld.in/public_html/resources/views/frontend/infixlmstheme/profile/_offline_message_modal.blade.php ENDPATH**/ ?>
